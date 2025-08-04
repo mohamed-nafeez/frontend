@@ -13,11 +13,14 @@ permissions:
 # Allow only one concurrent deployment, skipping runs queued between the run in-progress and latest queued.
 concurrency:
   group: "pages"
-  cancel-in-progress: false
+  cancel-in-progress: true
 
 jobs:
   build-and-deploy:
     runs-on: ubuntu-latest
+    environment:
+      name: github-pages
+      url: ${{ steps.deployment.outputs.page_url }}
     
     steps:
     - name: Checkout
@@ -42,6 +45,7 @@ jobs:
       uses: actions/upload-pages-artifact@v3
       with:
         path: './dist'
+        name: github-pages
         
     - name: Deploy to GitHub Pages
       id: deployment
